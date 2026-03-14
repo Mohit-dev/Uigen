@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run:*)",
+      "Bash(npm install:*)",
+      "Bash(claude config:*)",
+      "Bash(npm i:*)",
+      "Bash(del:*)",
+      "Bash(cmd.exe:*)",
+      "Bash(cmd:*)",
+      "Bash(node:*)",
+      "Bash(npm test:*)",
+      "Bash(npx vitest:*)",
+      "mcp__playwright"
+    ]
+  }
+}

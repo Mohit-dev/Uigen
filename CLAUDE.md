@@ -87,7 +87,7 @@ Anonymous work is tracked in `src/lib/anon-work-tracker.ts` (localStorage) so it
 
 ### Testing
 
-Tests use Vitest + `@testing-library/react` with jsdom. Test files are colocated in `__tests__` directories next to the source. The Vitest config is in `vitest.config.ts`.
+Tests use Vitest + `@testing-library/react` with jsdom. Test files are colocated in `__tests__` directories next to the source. The Vitest config is in `vitest.config.mts`.
 
 ## Code Style
 
