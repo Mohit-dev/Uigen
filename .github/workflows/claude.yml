@@ -12,23 +12,24 @@ on:
 
 jobs:
   claude:
-    if: |
+    if: >-
       (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
       (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
       (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude')) ||
       (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')))
     runs-on: ubuntu-latest
     permissions:
-      contents: read
-      pull-requests: read
-      issues: read
+      contents: write
+      pull-requests: write
+      issues: write
       id-token: write
-      actions: read # Required for Claude to read CI results on PRs
+      actions: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
+
       - name: Project Setup
         run: |
           npm run setup
@@ -36,11 +37,10 @@ jobs:
 
       - name: Run Claude Code
         id: claude
-        uses: anthropics/claude-code-action@v1
+        uses: anthropics/claude-code-action@beta
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
 
-          # This is an optional setting that allows Claude to read CI results on PRs
           additional_permissions: |
             actions: read
 
@@ -63,17 +63,12 @@ jobs:
               }
             }
 
-          allowed_tools: "Bash(npm:*),Bash(sqlite3:*),mcp__playwright__browser_navigate, mcp__playwright__browser_navigate_back, 
-          mcp__playwright__browser_click, mcp__playwright__browser_hover, mcp__playwright__browser_drag, 
-          mcp__playwright__browser_type, mcp__playwright__browser_fill_form, mcp__playwright__browser_select_option, 
-          mcp__playwright__browser_press_key, mcp__playwright__browser_file_upload, mcp__playwright__browser_handle_dialog, 
-          mcp__playwright__browser_evaluate, mcp__playwright__browser_run_code, mcp__playwright__browser_snapshot, 
-          mcp__playwright__browser_take_screenshot, mcp__playwright__browser_wait_for, mcp__playwright__browser_resize, 
-          mcp__playwright__browser_console_messages, mcp__playwright__browser_network_requests, mcp__playwright__browser_close, 
-          mcp__playwright__browser_tabs, mcp__playwright__browser_install, mcp__playwright__browser_mouse_click_xy, 
-          mcp__playwright__browser_mouse_move_xy, mcp__playwright__browser_mouse_drag_xy, mcp__playwright__browser_mouse_down, 
-          mcp__playwright__browser_mouse_up, mcp__playwright__browser_mouse_wheel, mcp__playwright__browser_pdf_save, 
-          mcp__playwright__browser_generate_locator, mcp__playwright__browser_verify_element_visible, 
-          mcp__playwright__browser_verify_list_visible, mcp__playwright__browser_verify_text_visible, 
-          mcp__playwright__browser_verify_value"  
-
+          allowed_tools: >-
+            Bash(npm:*),Bash(sqlite3:*),mcp__playwright__browser_navigate,mcp__playwright__browser_navigate_back,
+            mcp__playwright__browser_click,mcp__playwright__browser_hover,mcp__playwright__browser_drag,
+            mcp__playwright__browser_type,mcp__playwright__browser_fill_form,mcp__playwright__browser_select_option,
+            mcp__playwright__browser_press_key,mcp__playwright__browser_file_upload,mcp__playwright__browser_handle_dialog,
+            mcp__playwright__browser_evaluate,mcp__playwright__browser_run_code,mcp__playwright__browser_snapshot,
+            mcp__playwright__browser_take_screenshot,mcp__playwright__browser_wait_for,mcp__playwright__browser_resize,
+            mcp__playwright__browser_console_messages,mcp__playwright__browser_network_requests,mcp__playwright__browser_close,
+            mcp__playwright__browser_tabs,mcp__playwright__browser_install
